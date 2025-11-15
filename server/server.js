@@ -36,7 +36,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 app.get('/api/v1/env', (_, res) => {
-  res.json({ env: 'blue' });
+  res.json({ env: process.env.CURRENT_COLOR || 'not set' });
 });
 
 app.use('/api/v1/todos', router);
