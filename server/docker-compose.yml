@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: server
     hostname: server
     env_file:
       - .env
@@ -18,7 +17,6 @@ services:
       - mongodb_network
   mongodb:
     image: mongo:latest
-    container_name: mongodb
     hostname: mongodb
     volumes:
       - mongodb-data:/data/db/
@@ -28,8 +26,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    ports:
-      - "27017:27017"
     networks:
       - mongodb_network
 
