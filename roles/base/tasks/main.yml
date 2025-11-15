@@ -1,0 +1,51 @@
+---
+- name: Update APT packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install useful packages
+  apt:
+    name:
+      - curl
+      - git
+      - ufw
+      - fail2ban
+      - nodejs
+      - npm
+      - docker.io
+      - unzip
+      - python3-pip
+    state: present
+
+- name: Download AWS CLI V2 installer bundle
+  ansible.builtin.get_url:
+    url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ ansible_architecture }}.zip"
+    dest: "/tmp/awscliv2.zip"
+    mode: '0644'
+
+- name: Unzip the AWS CLI V2 installer bundle
+  ansible.builtin.unarchive:
+    src: "/tmp/awscliv2.zip"
+    dest: "/tmp"
+    remote_src: yes # Source is on the remote machine (where the file was downloaded)
+
+- name: Run the AWS CLI V2 install script
+  ansible.builtin.command: /tmp/aws/install
+  args:
+    # Use the 'creates' argument to make the task idempotent (only run if 'aws' is not yet installed)
+    creates: /usr/local/bin/aws
+
+- name: Ensure the Docker CLI plugin directory exists
+  ansible.builtin.file:
+    path: /usr/local/lib/docker/cli-plugins
+    state: directory
+    mode: '0755'
+
+- name: Download the Docker Compose V2 binary as a plugin
+  ansible.builtin.get_url:
+    # Use the same URL you had
+    url: "https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    # IMPORTANT: Change the destination to the plugin directory
+    dest: "/usr/local/lib/docker/cli-plugins/docker-compose"
+    mode: '0755' # Set permissions to be executable

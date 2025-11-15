@@ -1,0 +1,26 @@
+---
+- name: Clone the repository
+  git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_path }}"
+    version: main
+    force: yes
+
+- name: Create .env file for Docker Compose
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "{{ app_path }}/server/.env"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Start Node.js and MongoDB containers with Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_path }}/server"
+    build: always
+    state: present
+  environment:
+    PORT: "{{ node_app_port }}"
+    MONGO_URI: "{{ mongo_uri }}"
+    MONGO_INITDB_ROOT_USERNAME: "{{ mongo_initdb_root_username }}"
+    MONGO_INITDB_ROOT_PASSWORD: "{{ mongo_initdb_root_password }}"
