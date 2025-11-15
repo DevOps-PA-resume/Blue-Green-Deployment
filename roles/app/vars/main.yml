@@ -1,5 +1,5 @@
 app_name: nodejs-service
-app_repo: "https://github.com/DevOps-PA-resume/Multi-Container-Application"
+app_repo: "https://github.com/DevOps-PA-resume/Blue-Green-Deployment"
 app_path: "/var/www/nodejs-service"
 node_app_port: 3000
 mongo_uri: "mongodb://root:password@mongodb:27017/todoapp?authSource=admin"
