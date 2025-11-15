@@ -1,7 +1,9 @@
 app_name: nodejs-service
 app_repo: "https://github.com/DevOps-PA-resume/Blue-Green-Deployment"
 app_path: "/var/www/nodejs-service"
-node_app_port: 3000
 mongo_uri: "mongodb://root:password@mongodb:27017/todoapp?authSource=admin"
 mongo_initdb_root_username: root
 mongo_initdb_root_password: password
+blue_port: 8080
+green_port: 8081
+target_color: blue

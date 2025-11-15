@@ -1,13 +1,26 @@
+# Map active_color to upstream
+map $active_color $upstream_name {
+    default myapp_blue;
+    blue myapp_blue;
+    green myapp_green;
+}
+
+# Upstreams
+upstream myapp_blue { server 127.0.0.1:8080; }
+upstream myapp_green { server 127.0.0.1:8081; }
+
+# Server block
 server {
     listen 80;
-    server_name yourdomain.com;   # or your server's IP if you don't have a domain
+
+    # Include the active_color variable inside the server block
+    include /etc/nginx/active_color.conf;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;  # send requests to your Node.js app
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_pass http://$upstream_name;
         proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }

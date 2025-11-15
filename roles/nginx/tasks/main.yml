@@ -4,6 +4,14 @@
     name: nginx
     state: present
 
+- name: Ensure active_color.conf exists
+  copy:
+    dest: /etc/nginx/active_color.conf
+    content: "set $active_color blue;\n"
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Copy Nginx configuration
   template:
     src: nginx.conf.j2

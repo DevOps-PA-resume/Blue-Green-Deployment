@@ -49,3 +49,21 @@
     # IMPORTANT: Change the destination to the plugin directory
     dest: "/usr/local/lib/docker/cli-plugins/docker-compose"
     mode: '0755' # Set permissions to be executable
+
+- name: Create directory for Blue Green configuration
+  ansible.builtin.file:
+    path: /etc/server
+    state: directory
+    mode: '0755'
+
+- name: Copy Blue Green configuration
+  template:
+    src: current_color
+    dest: /etc/server/current_color
+    mode: '0644'
+
+- name: Copy Blue Green switch script
+  template:
+    src: switch_color.sh
+    dest: /etc/server/switch_color.sh
+    mode: '0700'
